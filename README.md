@@ -1,12 +1,12 @@
 # Sharone
 
 AI & Data Science undergrad @ LICET, Chennai.
-Into AI, Python, and hackathons.
+Into AI, Python,ML
 
 ---
 
 ## Tech Stack
 
-Python · JavaScript · C  
-TensorFlow · NumPy · Pandas · Scikit-learn  
-Node.js · Git · AWS · Auth0
+Python · Java · C  
+TensorFlow · NumPy · Pandas ·
+Node.js ·Auth0
