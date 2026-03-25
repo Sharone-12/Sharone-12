@@ -1,7 +1,7 @@
 # Sharone
 
-AI & Data Science undergrad @ LICET, Chennai.
-Into AI, Python,ML
+AI & Data Science undergrad 
+Into AI, Python,ML,Building cool looking stuffs
 
 ---
 
