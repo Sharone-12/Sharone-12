@@ -1,5 +1,5 @@
-# 💫About Me:
-## 👨‍💻 About Me<br><br>🔭 I’m currently working on  <br>→ Learning Web3 development and building smart contracts using Solidity  <br><br>🤝 I’m looking to collaborate on  <br>→ Web3 projects, full-stack apps, and innovative frontend ideas  <br><br>🛠️ I’m looking for help with  <br>→ Smart contract security and advanced Three.js optimizations  <br><br>🌱 I’m currently learning  <br>→ Web3 development and Solidity for smart contract development  <br><br>💬 <br>⚡
+# About Me:
+##  About Me<br><br>🔭 I’m currently working on  <br>→ Learning Web3 development and building smart contracts using Solidity  <br><br>🤝 I’m looking to collaborate on  <br>→ Web3 projects, full-stack apps, and innovative frontend ideas  <br><br>🛠️ I’m looking for help with  <br>→ Smart contract security and advanced Three.js optimizations  <br><br>🌱 I’m currently learning  <br>→ Web3 development and Solidity for smart contract development  <br><br>💬 <br>⚡
 
 
 ## 🌐 Socials:
