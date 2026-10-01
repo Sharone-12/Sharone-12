@@ -121,27 +121,53 @@ path = walk
 # ping-pong: forward then back, excluding duplicated endpoints
 pingpong = path + path[-2::-1]
 
-SNAKE_LEN = 8
-SNAKE_COLOR = (255, 140, 60)
-STEP_PX = 2  # advance this many path-points per frame
+SNAKE_LEN = 9       # path points included in the body
+LINE_WIDTH = 9
+BODY_COLOR = (147, 51, 234)   # purple
+HEAD_COLOR = (168, 85, 247)
+STEP_PX = 1         # advance this many path-points per frame
+
+def center(cell):
+    w, h = cell
+    box = cell_box(w, h)
+    return ((box[0] + box[2]) / 2, (box[1] + box[3]) / 2)
 
 frames = []
 for i in range(0, len(pingpong), STEP_PX):
     frame = base.copy()
     fd = ImageDraw.Draw(frame)
-    for k in range(SNAKE_LEN):
-        idx = i - k
-        if idx < 0 or idx >= len(pingpong):
-            continue
-        w, h = pingpong[idx]
-        alpha = max(40, 255 - k * 32)
-        color = SNAKE_COLOR + (alpha,)
-        box = cell_box(w, h)
-        pad = 1
-        fd.rounded_rectangle(
-            [box[0]-pad, box[1]-pad, box[2]+pad, box[3]+pad],
-            radius=3, fill=color
-        )
+
+    idxs = [idx for idx in range(i - SNAKE_LEN + 1, i + 1) if 0 <= idx < len(pingpong)]
+    points = [center(pingpong[idx]) for idx in idxs]
+
+    r = LINE_WIDTH / 2
+    if len(points) >= 2:
+        fd.line(points, fill=BODY_COLOR, width=LINE_WIDTH, joint="curve")
+        for p in points:
+            fd.ellipse([p[0]-r, p[1]-r, p[0]+r, p[1]+r], fill=BODY_COLOR)
+    elif points:
+        p = points[0]
+        fd.ellipse([p[0]-r, p[1]-r, p[0]+r, p[1]+r], fill=BODY_COLOR)
+
+    # head + eyes, facing the direction of travel
+    head_idx = idxs[-1]
+    head_cell = pingpong[head_idx]
+    prev_cell = pingpong[head_idx - 1] if head_idx > 0 else head_cell
+    dx, dy = head_cell[0] - prev_cell[0], head_cell[1] - prev_cell[1]
+    if dx == 0 and dy == 0:
+        dx, dy = 1, 0
+    hx, hy = center(head_cell)
+    fd.ellipse([hx-r-1, hy-r-1, hx+r+1, hy+r+1], fill=HEAD_COLOR)
+
+    perp = (-dy, dx)
+    fwd = 2.2
+    gap = 2.6
+    ex, ey = hx + dx * fwd, hy + dy * fwd
+    for sign in (1, -1):
+        exx, eyy = ex + perp[0]*gap*sign, ey + perp[1]*gap*sign
+        fd.ellipse([exx-1.6, eyy-1.6, exx+1.6, eyy+1.6], fill=(255, 255, 255))
+        fd.ellipse([exx-0.7, eyy-0.7, exx+0.7, eyy+0.7], fill=(15, 10, 20))
+
     frames.append(frame)
 
 p_frames = [f.convert("RGB").convert("P", palette=Image.ADAPTIVE, colors=64) for f in frames]
@@ -150,7 +176,7 @@ p_frames[0].save(
     OUT,
     save_all=True,
     append_images=p_frames[1:],
-    duration=70,
+    duration=150,
     loop=0,
     optimize=True,
 )
