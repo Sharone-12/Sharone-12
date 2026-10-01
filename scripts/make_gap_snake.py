@@ -31,7 +31,7 @@ CELL = 11
 GAP = 3
 STEP = CELL + GAP
 MARGIN = 6
-PAD = 2  # extra rows/cols of open space around the grid the snake can travel through
+PAD = 1  # thin margin the snake only uses as a last resort when fully blocked
 
 IMG_W = MARGIN * 2 + (W + 2 * PAD) * STEP - GAP
 IMG_H = MARGIN * 2 + (H + 2 * PAD) * STEP - GAP
@@ -89,8 +89,17 @@ for start in space:
 
 largest = max(components, key=len) if components else {(0, 0)}
 
+def in_grid(cell):
+    w, h = cell
+    return 0 <= w < W and 0 <= h < H
+
 def comp_neighbors(cell):
-    return [nb for nb in neighbors(cell) if nb in largest]
+    # prefer staying inside the real grid; only step into the margin when every
+    # in-grid neighbor is already visited (i.e. genuinely blocked)
+    nbs = [nb for nb in neighbors(cell) if nb in largest]
+    inside = [nb for nb in nbs if in_grid(nb)]
+    outside = [nb for nb in nbs if not in_grid(nb)]
+    return inside + outside
 
 # full DFS "Euler tour" of the connected gap region: every consecutive step is a
 # real orthogonal move (forward into a new cell, or backtracking to the parent)
@@ -125,42 +134,55 @@ SNAKE_LEN = 9       # path points included in the body
 LINE_WIDTH = 9
 BODY_COLOR = (147, 51, 234)   # purple
 HEAD_COLOR = (168, 85, 247)
-STEP_PX = 1         # advance this many path-points per frame
+SUBSTEPS = 2        # interpolated sub-frames per cell-to-cell move, for a smooth glide
 
 def center(cell):
     w, h = cell
     box = cell_box(w, h)
     return ((box[0] + box[2]) / 2, (box[1] + box[3]) / 2)
 
+path_centers = [center(c) for c in pingpong]
+last_idx = len(pingpong) - 1
+
+def lerp(a, b, t):
+    return (a[0] + (b[0]-a[0])*t, a[1] + (b[1]-a[1])*t)
+
+def point_at(t):
+    t = max(0.0, min(last_idx, t))
+    f = int(t)
+    frac = t - f
+    c = min(f + 1, last_idx)
+    return lerp(path_centers[f], path_centers[c], frac)
+
+total_frames = last_idx * SUBSTEPS + 1
+
 frames = []
-for i in range(0, len(pingpong), STEP_PX):
+for frame_i in range(total_frames):
+    t = frame_i / SUBSTEPS
     frame = base.copy()
     fd = ImageDraw.Draw(frame)
 
-    idxs = [idx for idx in range(i - SNAKE_LEN + 1, i + 1) if 0 <= idx < len(pingpong)]
-    points = [center(pingpong[idx]) for idx in idxs]
+    points = [point_at(t - k) for k in range(SNAKE_LEN - 1, -1, -1)]
 
     r = LINE_WIDTH / 2
     if len(points) >= 2:
         fd.line(points, fill=BODY_COLOR, width=LINE_WIDTH, joint="curve")
         for p in points:
             fd.ellipse([p[0]-r, p[1]-r, p[0]+r, p[1]+r], fill=BODY_COLOR)
-    elif points:
+    else:
         p = points[0]
         fd.ellipse([p[0]-r, p[1]-r, p[0]+r, p[1]+r], fill=BODY_COLOR)
 
     # head + eyes, facing the direction of travel
-    head_idx = idxs[-1]
-    head_cell = pingpong[head_idx]
-    prev_cell = pingpong[head_idx - 1] if head_idx > 0 else head_cell
-    dx, dy = head_cell[0] - prev_cell[0], head_cell[1] - prev_cell[1]
-    if dx == 0 and dy == 0:
-        dx, dy = 1, 0
-    hx, hy = center(head_cell)
+    hx, hy = points[-1]
+    px, py = point_at(t - 0.6)
+    dx, dy = hx - px, hy - py
+    mag = (dx*dx + dy*dy) ** 0.5 or 1.0
+    dx, dy = dx / mag, dy / mag
     fd.ellipse([hx-r-1, hy-r-1, hx+r+1, hy+r+1], fill=HEAD_COLOR)
 
     perp = (-dy, dx)
-    fwd = 2.2
+    fwd = 2.6
     gap = 2.6
     ex, ey = hx + dx * fwd, hy + dy * fwd
     for sign in (1, -1):
@@ -176,7 +198,7 @@ p_frames[0].save(
     OUT,
     save_all=True,
     append_images=p_frames[1:],
-    duration=150,
+    duration=75,
     loop=0,
     optimize=True,
 )
