@@ -47,9 +47,8 @@
 
 <div align="center">
 
-<img src="./assets/take-care-spin.gif" width="160" alt="Take Care — Drake, spinning" />
-
-<sub>on repeat: <i>Take Care</i> — Drake</sub>
+<img src="./assets/take-care-spin.gif" width="150" alt="Take Care — Drake, spinning" />
+<img src="./assets/channel-orange-spin.gif" width="150" alt="channel ORANGE — Frank Ocean, spinning" />
 
 </div>
 
