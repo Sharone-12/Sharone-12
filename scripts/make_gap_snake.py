@@ -47,23 +47,70 @@ for w in range(W):
         lvl = grid.get((w, h), 0)
         bd.rounded_rectangle(cell_box(w, h), radius=2, fill=LEVEL_COLOR[lvl])
 
-# boustrophedon order over gap (zero-contribution) cells only
-path = []
-for w in range(W):
-    rng = range(H) if w % 2 == 0 else range(H - 1, -1, -1)
-    for h in rng:
-        if grid.get((w, h), 0) == 0:
-            path.append((w, h))
+# gap cells (no contributions) only move orthogonally between them, like a real snake
+gaps = {c for c, lvl in grid.items() if lvl == 0}
 
-if not path:
-    path = [(0, 0)]
+def neighbors(cell):
+    w, h = cell
+    for dw, dh in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+        nb = (w + dw, h + dh)
+        if nb in gaps:
+            yield nb
+
+# connected components of the gap graph; the snake can only ever walk within one
+seen = set()
+components = []
+for start in gaps:
+    if start in seen:
+        continue
+    stack = [start]
+    comp = set()
+    while stack:
+        cur = stack.pop()
+        if cur in comp:
+            continue
+        comp.add(cur)
+        seen.add(cur)
+        stack.extend(nb for nb in neighbors(cur) if nb not in comp)
+    components.append(comp)
+
+largest = max(components, key=len) if components else {(0, 0)}
+
+def comp_neighbors(cell):
+    return [nb for nb in neighbors(cell) if nb in largest]
+
+# full DFS "Euler tour" of the connected gap region: every consecutive step is a
+# real orthogonal move (forward into a new cell, or backtracking to the parent)
+start = min(largest)
+visited = {start}
+stack = [start]
+iters = {start: iter(comp_neighbors(start))}
+walk = [start]
+
+while stack:
+    node = stack[-1]
+    advanced = False
+    for nb in iters[node]:
+        if nb not in visited:
+            visited.add(nb)
+            stack.append(nb)
+            iters[nb] = iter(comp_neighbors(nb))
+            walk.append(nb)
+            advanced = True
+            break
+    if not advanced:
+        stack.pop()
+        if stack:
+            walk.append(stack[-1])
+
+path = walk
 
 # ping-pong: forward then back, excluding duplicated endpoints
 pingpong = path + path[-2::-1]
 
-SNAKE_LEN = 7
+SNAKE_LEN = 8
 SNAKE_COLOR = (255, 140, 60)
-STEP_PX = 2  # advance this many path-points per frame
+STEP_PX = 1  # advance this many path-points per frame (1 = true cell-by-cell crawl)
 
 frames = []
 for i in range(0, len(pingpong), STEP_PX):
@@ -90,7 +137,7 @@ p_frames[0].save(
     OUT,
     save_all=True,
     append_images=p_frames[1:],
-    duration=55,
+    duration=110,
     loop=0,
     optimize=True,
 )
