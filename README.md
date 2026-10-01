@@ -7,12 +7,6 @@
 
 `B.Tech AI & Data Science` · `LICET Chennai` · `Class of 2028`
 
-<br/>
-
-[![Portfolio](https://img.shields.io/badge/portfolio-000?style=for-the-badge&logo=vercel&logoColor=white)](https://pilgrimage-steel.vercel.app)
-[![Gmail](https://img.shields.io/badge/mail_me-000?style=for-the-badge&logo=gmail&logoColor=EA4335)](mailto:antonythomassharone@gmail.com)
-[![LinkedIn](https://img.shields.io/badge/linkedin-000?style=for-the-badge&logo=linkedin&logoColor=0A66C2)](https://linkedin.com/in/antony-thomas-sharone)
-
 </div>
 
 ---
@@ -21,10 +15,10 @@
 
 | Project | What it does | Stack | Link |
 |---------|-------------|-------|------|
-| **Pilgrimage** | Dual-LLM Journey to the West combat game — craft prompts to defeat mythological bosses | FastAPI · Groq · Vanilla JS | [play →](https://pilgrimage-steel.vercel.app) |
-| **NetCode** | Declarative DSL where one file describes an entire network forensic investigation | Rust · Tree-sitter · TShark/Zeek | SIH 2026 |
-| **16-0 IPL Sim** | Role-normalized OVR draft engine across 3,354 player-seasons — 450+ users | React · Supabase · Vercel | [play →](https://16-0game.vercel.app) |
-| **F1 Race Sim** | Physics-based tyre degradation race strategy simulator | FastAPI · FastF1 · React/Vite | [play →](https://f1racesim.vercel.app) |
+| **16-0 IPL Sim** | Fantasy IPL draft-and-sim game — spin for real franchise-seasons, build a role-locked XI, and simulate a full league + playoffs against 808 rated players across 3,353 player-seasons | React · Supabase · Vercel | [play →](https://16-0game.vercel.app) · [repo →](https://github.com/Sharone-12/16-0-IPL-Sim) |
+| **Mulenet** | A fraud-detection engine that finds money-mule rings in transaction data by combining five independent graph detectors into a ranked investigator queue | Python · pandas · FastAPI · graph algorithms | [repo →](https://github.com/Sharone-12/mulenet) |
+| **F1 Race Sim** | A browser race-strategy simulator — set tyres, fuel, and pit calls, then watch a physics-driven lap-by-lap race play out against an AI grid | FastAPI · FastF1 · React/Vite | [play →](https://f1racesim.vercel.app) · [repo →](https://github.com/Sharone-12/F1-Sim) |
+| **Pilgrimage** | A browser combat game where you defeat mythological bosses by crafting prompts instead of button-mashing | FastAPI · Groq · Vanilla JS | [play →](https://pilgrimage-steel.vercel.app) · [repo →](https://github.com/Sharone-12/pilgrimage) |
 
 <br/>
 
