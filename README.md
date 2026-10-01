@@ -1,7 +1,7 @@
 <div align="center">
 
 <!-- HEADER -->
-<img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=700&size=30&duration=3000&pause=1000&color=58A6FF&center=true&vCenter=true&random=false&width=600&height=60&lines=sharone.;ai+engineer+in+the+making.;i+build+things+that+ship." alt="Typing SVG" />
+<img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=700&size=30&duration=3000&pause=1000&color=58A6FF&center=true&vCenter=true&random=false&width=600&height=60&lines=sharone.;i+build+things+that+ship." alt="Typing SVG" />
 
 <br/>
 
@@ -16,14 +16,6 @@
 </div>
 
 ---
-
-### `> whoami`
-
-19 y/o building at the intersection of **AI engineering** and **full-stack dev**. I don't grind DSA for FAANG — I ship projects, win hackathons, and let the work speak.
-
-Currently deep in: **RAG pipelines · AI agents · LLM evals & observability**
-
-<br/>
 
 ### `> ls ./projects`
 
