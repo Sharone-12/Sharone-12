@@ -31,13 +31,14 @@ CELL = 11
 GAP = 3
 STEP = CELL + GAP
 MARGIN = 6
+PAD = 2  # extra rows/cols of open space around the grid the snake can travel through
 
-IMG_W = MARGIN * 2 + W * STEP - GAP
-IMG_H = MARGIN * 2 + H * STEP - GAP
+IMG_W = MARGIN * 2 + (W + 2 * PAD) * STEP - GAP
+IMG_H = MARGIN * 2 + (H + 2 * PAD) * STEP - GAP
 
 def cell_box(w, h):
-    x0 = MARGIN + w * STEP
-    y0 = MARGIN + h * STEP
+    x0 = MARGIN + (w + PAD) * STEP
+    y0 = MARGIN + (h + PAD) * STEP
     return [x0, y0, x0 + CELL, y0 + CELL]
 
 base = Image.new("RGBA", (IMG_W, IMG_H), (13, 17, 23, 255))
@@ -47,20 +48,32 @@ for w in range(W):
         lvl = grid.get((w, h), 0)
         bd.rounded_rectangle(cell_box(w, h), radius=2, fill=LEVEL_COLOR[lvl])
 
-# gap cells (no contributions) only move orthogonally between them, like a real snake
-gaps = {c for c, lvl in grid.items() if lvl == 0}
+# walkable space = every real grid cell with no contributions, PLUS a ring of open
+# space around the whole grid, so the snake can go above/below/past a blocked run
+# of columns instead of being trapped in whichever pocket it started in
+def is_free(w, h):
+    if 0 <= w < W and 0 <= h < H:
+        return grid.get((w, h), 0) == 0
+    return -PAD <= w < W + PAD and -PAD <= h < H + PAD
+
+space = {
+    (w, h)
+    for w in range(-PAD, W + PAD)
+    for h in range(-PAD, H + PAD)
+    if is_free(w, h)
+}
 
 def neighbors(cell):
     w, h = cell
     for dw, dh in ((1, 0), (-1, 0), (0, 1), (0, -1)):
         nb = (w + dw, h + dh)
-        if nb in gaps:
+        if nb in space:
             yield nb
 
-# connected components of the gap graph; the snake can only ever walk within one
+# connected components of the walkable space; the snake can only ever roam within one
 seen = set()
 components = []
-for start in gaps:
+for start in space:
     if start in seen:
         continue
     stack = [start]
@@ -110,7 +123,7 @@ pingpong = path + path[-2::-1]
 
 SNAKE_LEN = 8
 SNAKE_COLOR = (255, 140, 60)
-STEP_PX = 1  # advance this many path-points per frame (1 = true cell-by-cell crawl)
+STEP_PX = 2  # advance this many path-points per frame
 
 frames = []
 for i in range(0, len(pingpong), STEP_PX):
@@ -137,7 +150,7 @@ p_frames[0].save(
     OUT,
     save_all=True,
     append_images=p_frames[1:],
-    duration=110,
+    duration=70,
     loop=0,
     optimize=True,
 )
