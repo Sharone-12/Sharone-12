@@ -43,6 +43,18 @@
 
 <br/>
 
+### `> play ./now-spinning.mp3`
+
+<div align="center">
+
+<img src="./assets/take-care-spin.gif" width="160" alt="Take Care — Drake, spinning" />
+
+<sub>on repeat: <i>Take Care</i> — Drake</sub>
+
+</div>
+
+<br/>
+
 ### `> git stats`
 
 <div align="center">
