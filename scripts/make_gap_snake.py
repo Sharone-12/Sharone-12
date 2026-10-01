@@ -141,7 +141,23 @@ def center(cell):
     box = cell_box(w, h)
     return ((box[0] + box[2]) / 2, (box[1] + box[3]) / 2)
 
-path_centers = [center(c) for c in pingpong]
+# a 1-deep dead end forces the walk to retrace the exact same cell (A, B, A) on
+# its way back out; rendered as a thick line that overlaps itself perfectly,
+# that pinch reads as a glitch. Nudge the tip sideways so it's a small rounded
+# hook instead of a perfect retrace.
+TIP_NUDGE = STEP * 0.3
+path_centers = [list(center(c)) for c in path]
+for i in range(1, len(path) - 1):
+    if path[i - 1] == path[i + 1]:
+        aw, ah = path[i - 1]
+        bw, bh = path[i]
+        dw, dh = bw - aw, bh - ah
+        perp = (-dh, dw)
+        path_centers[i][0] += perp[0] * TIP_NUDGE
+        path_centers[i][1] += perp[1] * TIP_NUDGE
+path_centers = [tuple(p) for p in path_centers]
+pingpong_centers = path_centers + path_centers[-2::-1]
+path_centers = pingpong_centers
 last_idx = len(pingpong) - 1
 
 def lerp(a, b, t):
