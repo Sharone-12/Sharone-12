@@ -95,8 +95,4 @@
 
 <img src="https://komarev.com/ghpvc/?username=sharone-12&style=flat-square&color=58a6ff&label=visitors" />
 
-```
-$ echo "if you're reading this, go build something"
-```
-
 </div>
