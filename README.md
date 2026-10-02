@@ -73,6 +73,8 @@
 
 <img src="./assets/take-care-spin.gif" width="150" alt="Take Care — Drake, spinning" />
 <img src="./assets/channel-orange-spin.gif" width="150" alt="channel ORANGE — Frank Ocean, spinning" />
+<img src="./assets/late-reg-spin.gif" width="150" alt="Late Registration — Kanye West, spinning" />
+<img src="./assets/graduation-spin.gif" width="150" alt="Graduation — Kanye West, spinning" />
 
 </div>
 
