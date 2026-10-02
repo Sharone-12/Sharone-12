@@ -3,10 +3,6 @@
 <!-- HEADER -->
 <img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=700&size=30&duration=3000&pause=1000&color=58A6FF&center=true&vCenter=true&random=false&width=600&height=60&lines=sharone.;i+build+things+that+ship." alt="Typing SVG" />
 
-<br/>
-
-`B.Tech AI & Data Science` · `LICET Chennai` · `Class of 2028`
-
 </div>
 
 ---
